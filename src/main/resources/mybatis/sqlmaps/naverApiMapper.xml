@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="naverApiMapper">
+
+	<select id="selectSearchCountBySingleDate" parameterType="HashMap" resultType="Long" >
+	     SELECT SEARCH_COUNT 
+	     FROM TB_BASE_RATIO
+	     WHERE DATE = #{date}
+	     AND KEYWORD_ID = #{id}
+	</select>
+	
+	
+	<select id="selectSearchCountByDateTerms" parameterType="HashMap" resultType="HashMap" >
+	     SELECT DATE, SEARCH_COUNT
+	     FROM TB_BASE_RATIO
+	     WHERE KEYWORD_ID = #{id}
+	</select>
+	
+	
+	<select id="selectKeywordMaxDate" parameterType="HashMap" resultType="String" >
+	     SELECT MAX(DATE) 
+	     FROM TB_BASE_RATIO
+	     WHERE KEYWORD_ID = #{id}
+	</select>
+	
+	
+	<insert id="insertMultiRatioData" parameterType="com.kr.jyp.vo.NaverRspVo" > 
+		INSERT INTO TB_BASE_RATIO ( DATE, KEYWORD_ID , SEARCH_COUNT, CREATE_ID, CREATE_DATE, MODIFY_ID, MODIFY_DATE) 
+		VALUES ( #{period},  #{keywordId}, #{calCount} ,'system', now(), 'system', now() )
+			ON DUPLICATE KEY UPDATE
+			  SEARCH_COUNT = #{calCount}
+			 ,MODIFY_ID = 'system'
+			 ,MODIFY_DATE = now()
+			 
+	</insert>
+	
+	
+	<select id="selectKeywordIdByName" parameterType="HashMap" resultType="String" >
+	     SELECT KEYWORD_ID
+	     FROM TB_LIST_CELEB
+	     WHERE KEYWORD_NAME = #{name}
+	</select>	
+
+	
+
+</mapper>
+
+
+

@@ -1,0 +1,56 @@
+@charset "UTF-8";
+
+body{
+    padding-top:70px;
+}
+
+.fixedTopLayer{
+	position: fixed;
+	border-bottom:1px solid gray;
+	
+    background-color: black;
+    color:white;
+    left:0;
+    top:0;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+}
+
+.container{
+	margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+header{
+    border-bottom:1px solid gray;
+    padding-left:20px;
+}
+
+footer{
+    border-top:1px solid gray;
+    padding:20px;
+    text-align: center;
+}
+
+.content{
+    display:flex;
+}
+
+.content nav{
+    border-right:1px solid gray;
+}
+
+.content aside{
+    border-left:1px solid gray;    
+}
+
+nav, aside{
+    flex-basis: 150px;
+    flex-shrink: 0;
+}
+
+main{
+    padding:10px;
+}

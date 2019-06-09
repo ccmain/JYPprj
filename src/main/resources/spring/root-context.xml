@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd 
+						http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<!-- 스케쥴러 어노테이션 -->
+	<task:annotation-driven />
+		
+    <!-- contextProperties 사용 설정(선언부에서 선언해야 사용가능한듯) -->
+    <util:properties id="contextProperties" location="classpath:context.properties"/>
+
+	<!-- DB접속 설정 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="#{contextProperties.driver}"/>
+        <property name="url" value="#{contextProperties.url}"/>
+        <property name="username" value="#{contextProperties.username}"/>
+        <property name="password" value="#{contextProperties.password}"/>
+	</bean>           
+
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+           <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+
+	<!-- mybatis 설정 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+           <property name="dataSource" ref="dataSource" />
+           <property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
+           <property name="mapperLocations" value="classpath:mybatis/sqlmaps/*.xml" />
+    </bean>
+    
+    <!-- component scan 설정: Service, Repository, Component -->
+    <context:component-scan base-package="com.kr.jyp" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+    </context:component-scan>
+    
+</beans>
+
+
